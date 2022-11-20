@@ -5,14 +5,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import ru.practucum.explore.client.Client;
 import ru.practucum.explore.events.dto.EventFullDto;
-import ru.practucum.explore.events.dto.Static;
 import ru.practucum.explore.events.enums.SortType;
 import ru.practucum.explore.events.mapper.EventMapper;
 import ru.practucum.explore.events.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 
@@ -44,10 +42,6 @@ public class EventsController {
                                            @RequestParam(defaultValue = "0") int from,
                                            @RequestParam(defaultValue = "20") int size,
                                            HttpServletRequest request) {
-
-//        client.post("/hit",
-//          new Static("enw", request.getRequestURI(), request.getRemoteAddr(),
-//                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"))));
 
         client.create(request);
         return eventService.searchEvents(text, categories, paid,

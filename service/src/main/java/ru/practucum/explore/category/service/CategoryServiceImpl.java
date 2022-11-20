@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto updateCategory(CategoryDto categoryDto) {
         try {
             Category category = mapper.toCategory(getById(categoryDto.getId()));
-            if(category.getName() != null) {
+            if (category.getName() != null) {
                 category.setName(categoryDto.getName());
             }
             repository.save(category);

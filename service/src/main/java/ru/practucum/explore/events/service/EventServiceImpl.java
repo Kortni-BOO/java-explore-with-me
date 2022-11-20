@@ -64,7 +64,7 @@ public class EventServiceImpl implements EventService {
                                            LocalDateTime rangeEnd,
                                            Boolean onlyAvailable, SortType sort, int from, int size) {
 
-        if(sort == null) {
+        if (sort == null) {
             sort = SortType.VIEWS;
         }
         Specification<Event> specification = null;
@@ -90,15 +90,15 @@ public class EventServiceImpl implements EventService {
         }
 
         //Фильтр: categories
-        if(categories != null) {
+        if (categories != null) {
             specification = Specification.where(
-                    (event, query, cb)->
+                    (event, query, cb) ->
                             cb.in(event.get("category").get("id")).value(categories)
             );
         }
 
         //поиск только платных/бесплатных событий(paid)
-        if(paid != null) {
+        if (paid != null) {
             specification = (event, query, cb) -> cb.equal(event.get("paid"), paid);
         }
 
@@ -117,7 +117,7 @@ public class EventServiceImpl implements EventService {
             );
         }
 
-        if(rangeStart == null && rangeEnd == null) {
+        if (rangeStart == null && rangeEnd == null) {
             specification = (event, query, cb) ->
                     cb.lessThanOrEqualTo(event.get("eventDate"), LocalDateTime.now());
         }
@@ -132,9 +132,9 @@ public class EventServiceImpl implements EventService {
         }
         Pageable page;
 
-        if(sort.equals(SortType.VIEWS)) {
+        if (sort.equals(SortType.VIEWS)) {
             page = PageRequest.of(from, size, Sort.by(Sort.Direction.ASC, "views"));
-        } else if(sort.equals(SortType.EVENT_DATE)) {
+        } else if (sort.equals(SortType.EVENT_DATE)) {
             page = PageRequest.of(from, size, Sort.by(Sort.Direction.ASC, "eventDate"));
         } else {
             page = PageRequest.of(from, size, Sort.by(Sort.Direction.ASC, "views"));
@@ -167,54 +167,54 @@ public class EventServiceImpl implements EventService {
     public EventFullDto update(UpdateEventRequest eventDto, long userId) {
         //Event event = getById(eventDto.getId());
         Event event = getById(eventDto.getEventId());
-        if(event.getInitiator().getId() != userId) {
+        if (event.getInitiator().getId() != userId) {
             throw new NoAccessException(String.format(
                     "Данное событие не создавал пользователь с id %d.", userId)
             );
         }
-        if(event.getState().equals(State.PUBLISHED)) {
+        if (event.getState().equals(State.PUBLISHED)) {
             throw new NoAccessException("Опубликованное событие изменить не получится.");
         }
-        if(event.getState().equals(State.CANCELED)) {
+        if (event.getState().equals(State.CANCELED)) {
             event.setState(State.PENDING);
         }
-        if(event.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+        if (event.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new DateException("Время на которые намечено событие не может быть раньше, " +
                     "чем через два часа от текущего момента");
         }
         //annotation
-        if(eventDto.getAnnotation() != null) {
+        if (eventDto.getAnnotation() != null) {
             event.setAnnotation(eventDto.getAnnotation());
         }
 
         //category
-        if(eventDto.getCategory() != null) {
+        if (eventDto.getCategory() != null) {
             Category category = categoryMapper.toCategory(categoryService.getById(eventDto.getCategory()));
             event.setCategory(category);
         }
 
         //description
-        if(eventDto.getDescription() != null) {
+        if (eventDto.getDescription() != null) {
             event.setDescription(eventDto.getDescription());
         }
 
         //eventDate
-        if(eventDto.getEventDate() != null) {
+        if (eventDto.getEventDate() != null) {
             event.setEventDate(eventDto.getEventDate());
         }
 
         //paid
-        if(eventDto.getPaid() != null) {
+        if (eventDto.getPaid() != null) {
             event.setPaid(eventDto.getPaid());
         }
 
         //participantLimit
-        if(eventDto.getParticipantLimit() != null) {
+        if (eventDto.getParticipantLimit() != null) {
             event.setParticipantLimit(eventDto.getParticipantLimit());
         }
 
         //title
-        if(eventDto.getTitle() != null) {
+        if (eventDto.getTitle() != null) {
             event.setTitle(eventDto.getTitle());
         }
         event.setState(State.PENDING);
@@ -224,7 +224,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto create(NewEventDto eventDto, long userId) {
-        if(eventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+        if (eventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new DateException("Время на которые намечено событие не может быть раньше, " +
                     "чем через два часа от текущего момента");
         }
@@ -248,7 +248,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto getFullEvent(long eventId, long userId) {
         Event event = getById(eventId);
-        if(event.getInitiator().getId() != userId) {
+        if (event.getInitiator().getId() != userId) {
             throw new NoAccessException(String.format(
                     "Данное событие не создавал пользователь с id %d.", userId)
             );
@@ -259,12 +259,12 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto cancelEvent(long eventId, long userId) {
         Event event = getById(eventId);
-        if(event.getInitiator().getId() != userId) {
+        if (event.getInitiator().getId() != userId) {
             throw new NoAccessException(String.format(
                     "У пользователь с id %d нет прав доступа к событию.", userId)
             );
         }
-        if(event.getState().equals(State.PENDING)) {
+        if (event.getState().equals(State.PENDING)) {
             event.setState(State.CANCELED);
         } else {
             throw new NoAccessException("Опубликованное событие отменить нельзя.");
@@ -296,15 +296,15 @@ public class EventServiceImpl implements EventService {
         Specification<Event> specification = null;
 
         //User
-        if(!users.isEmpty() && users != null) {
+        if (!users.isEmpty() && users != null) {
             specification = Specification.where(specification).and(
-                    (event, query, cb)->
+                    (event, query, cb) ->
                             cb.in(event.get("initiator").get("id")).value(users)
             );
         }
 
         //State !states.isEmpty() && states != null
-        if(states != null) {
+        if (states != null) {
             //specification = (event, query, cb) -> cb.equal(event.get("state"), states);
             specification = Specification.where(specification).and(
                     (event, query, cb) -> cb.equal(event.get("state"), states)
@@ -312,7 +312,7 @@ public class EventServiceImpl implements EventService {
         }
 
         //Category есть отдельный метод
-        if(categories != null) {
+        if (categories != null) {
             //specification = belongsToCategory(categories);
             specification = Specification.where(specification).and(
                     (event, query, cb) ->
@@ -401,11 +401,11 @@ public class EventServiceImpl implements EventService {
     public EventFullDto adminPublishEvent(long eventId) {
         Event event = getById(eventId);
         //Событие должно быть в состоянии ожидания публикации
-        if(!event.getState().equals(State.PENDING)) {
+        if (!event.getState().equals(State.PENDING)) {
             throw new NoAccessException("Событие должно быть в состоянии ожидания публикации");
         }
         //Дата начала события должна быть не ранее чем за час от даты публикации
-        if(event.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
+        if (event.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
             throw new DateException("Дата начала события должна быть не ранее чем за час от даты публикации");
         }
         event.setState(State.PUBLISHED);
@@ -416,7 +416,7 @@ public class EventServiceImpl implements EventService {
     //Отклонение события
     public EventFullDto adminRejectEvent(long eventId) {
         Event event = getById(eventId);
-        if(event.getState().equals(State.PUBLISHED)) {
+        if (event.getState().equals(State.PUBLISHED)) {
             throw  new NoAccessException(String.format("Опубликованное событие id %d не может быть отклонено", eventId));
         }
         event.setState(State.CANCELED);

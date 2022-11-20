@@ -70,20 +70,20 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         User user = userMapper.toUser(userService.getById(userId));
         Event event = eventService.getById(eventId);
 
-        if(event.getInitiator().getId() == userId) {
+        if (event.getInitiator().getId() == userId) {
             throw new NoAccessException("Инициатор события не может добавить запрос на участие в своём событии");
         }
-        if(!event.getState().equals(State.PUBLISHED)) {
+        if (!event.getState().equals(State.PUBLISHED)) {
             throw new NoAccessException("Нельзя участвовать в неопубликованном событии");
         }
         /*если у события достигнут лимит запросов на участие - необходимо вернуть ошибку
           если для события отключена пре-модерация запросов на участие,
           то запрос должен автоматически перейти в состояние подтвержденного*/
         ParticipationRequest request = new ParticipationRequest();
-        if(event.getParticipantLimit() != 0 && event.getConfirmedRequests() == event.getParticipantLimit()) {
+        if (event.getParticipantLimit() != 0 && event.getConfirmedRequests().equals(event.getParticipantLimit())) {
             throw new NoAccessException("У события достигнут лимит запросов на участие ");
         }
-        if(!event.getRequestModeration()) {
+        if (!event.getRequestModeration()) {
             request.setStatus(Status.CONFIRMED);
         } else {
             request.setStatus(Status.PENDING);
@@ -100,7 +100,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     public ParticipationRequestDto cancelRequest(long userId, long requestId) {
         ParticipationRequest request = getById(requestId);
 
-        if(request.getRequester().getId() != userId) {
+        if (request.getRequester().getId() != userId) {
             throw new NoAccessException("Вы не можете отменить не свой запрос.");
         }
         request.setStatus(Status.CANCELED);
@@ -111,7 +111,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     @Override
     public List<ParticipationRequestDto> getAllUserEventsRequest(long userId, long eventId) {
         Event event = eventService.getById(eventId);
-        if(event.getInitiator().getId() != userId) {
+        if (event.getInitiator().getId() != userId) {
             throw new NoAccessException("У вас нет доступа.");
         }
         List<ParticipationRequest> request = repository.findByEventId(eventId);
@@ -130,16 +130,16 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
            - нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное событие
            - если при подтверждении данной заявки, лимит заявок для события исчерпан,
              то все неподтверждённые заявки необходимо отклонить*/
-        if(event.getParticipantLimit() == event.getConfirmedRequests()) {
+        if (event.getParticipantLimit().equals(event.getConfirmedRequests())) {
             throw new NoAccessException(String.format("Нельзя подтвердить заявку id %d," +
                     " уже достигнут лимит по заявкам на данное событие", reqId));
         }
         //переменна для хранения одобренных заявок confirmedRequests
         long count = event.getConfirmedRequests();
-        if(count + 1 >= event.getParticipantLimit()) {
+        if (count + 1 >= event.getParticipantLimit()) {
             rejectRequest(userId, eventId, reqId);
         }
-        if(event.getParticipantLimit() == 0 && !event.getRequestModeration() && event.getState().equals(State.PUBLISHED)) {
+        if (event.getParticipantLimit() == 0 && !event.getRequestModeration() && event.getState().equals(State.PUBLISHED)) {
             request.setStatus(Status.CONFIRMED);
         }
         request.setStatus(Status.CONFIRMED);

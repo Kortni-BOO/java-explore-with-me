@@ -35,7 +35,7 @@ public class StatisticServiceImpl implements StatisticService {
                 result = repository.findAllByTimestampAfterAndTimestampBeforeAndUri(start, end, uri);
             }
             if (result.size() != 0) {
-                for(EndpointHit vs : result ) {
+                for (EndpointHit vs : result) {
                     resultV.add(new ViewStats(vs.getApp(), vs.getUri(), result.size()));
                 }
             } else {

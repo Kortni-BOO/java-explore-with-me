@@ -22,7 +22,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "annotation", columnDefinition="text")
+    @Column(name = "annotation", columnDefinition = "text")
     String annotation; //Краткое описание
 
     @ManyToOne()
@@ -34,7 +34,7 @@ public class Event {
     @Column(name = "created_at")
     LocalDateTime createdOn; //Дата и время создания события (в формате "yyyy-MM-dd HH:mm:ss")
 
-    @Column(name = "description", columnDefinition="text")
+    @Column(name = "description", columnDefinition = "text")
     String description; //Полное описание события
 
     @Column(name = "event_date")

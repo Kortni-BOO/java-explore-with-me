@@ -11,6 +11,7 @@ import ru.practucum.explore.events.mapper.EventMapper;
 @RequiredArgsConstructor
 public class CompilationMapper {
     EventMapper mapper;
+
     public CompilationDto toCompilationDto(Compilation compilation) {
         return new CompilationDto(
                 compilation.getId(),
