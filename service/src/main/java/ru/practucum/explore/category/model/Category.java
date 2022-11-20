@@ -16,7 +16,8 @@ import javax.persistence.*;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id; //Идентификатор категории
+    @Column(name = "id")
+    Integer id; //Идентификатор категории
 
     @Column(name = "name")
     String name; //Название категории

@@ -9,9 +9,9 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDto {
-    long id;
+    Integer id;
 
-    @NonNull
+    
     @NotBlank
     String name;
 }

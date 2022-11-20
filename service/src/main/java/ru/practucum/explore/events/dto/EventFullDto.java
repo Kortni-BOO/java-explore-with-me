@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import ru.practucum.explore.category.model.Category;
 import ru.practucum.explore.events.enums.State;
+import ru.practucum.explore.events.model.Location;
 import ru.practucum.explore.user.model.User;
 
 import javax.validation.constraints.NotBlank;
@@ -23,7 +24,7 @@ public class EventFullDto {
     @NonNull
     Category category; //Категория
 
-    long confirmedRequests; //Количество одобренных заявок на участие в данном событии
+    Integer confirmedRequests; //Количество одобренных заявок на участие в данном событии
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdOn; //Дата и время создания события
@@ -37,16 +38,13 @@ public class EventFullDto {
     @NonNull
     User initiator; //Пользователь (краткая информация) UserShortDto
 
-    /**
-     * @NonNull
-     *
-     * location - разобраться
-     */
+    Location location;
+
 
     @NonNull
     Boolean paid; //Нужно ли оплачивать участие
 
-    int participantLimit; //Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
+    Integer participantLimit; //Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime publishedOn; //Дата и время публикации события

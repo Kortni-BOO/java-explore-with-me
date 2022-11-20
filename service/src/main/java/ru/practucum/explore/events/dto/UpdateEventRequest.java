@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practucum.explore.category.model.Category;
 
 import java.time.LocalDateTime;
 
@@ -18,18 +17,18 @@ public class UpdateEventRequest {
 
     String annotation; //Краткое описание
 
-    Category category; //Категория
+    Integer category; //Категория
 
     String description; //Полное описание события
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate; //Дата и время на которые намечено событие
 
-    int eventId;
+    long eventId;
 
     Boolean paid; //Нужно ли оплачивать участие
 
-    int participantLimit; //Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
+    Integer participantLimit; //Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
 
     String title; //Заголовок
 }

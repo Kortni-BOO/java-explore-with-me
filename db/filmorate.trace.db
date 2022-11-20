@@ -1,0 +1,20 @@
+2022-11-20 15:21:49 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "CREATE TABLE IF NOT EXISTS statistic ([*]"; ожидалось "identifier"
+Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS statistic ([*]"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS statistic ( [42001-214]
+2022-11-20 15:23:21 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "CREATE TABLE IF NOT EXISTS statistics ([*]"; ожидалось "identifier"
+Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS statistics ([*]"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS statistics ( [42001-214]
+2022-11-20 15:28:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "CREATE TABLE IF NOT EXISTS endpoint_hits ([*]"; ожидалось "identifier"
+Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS endpoint_hits ([*]"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS endpoint_hits ( [42001-214]
+2022-11-20 15:30:02 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "CREATE TABLE IF NOT EXISTS endpoint_hits ([*]"; ожидалось "identifier"
+Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS endpoint_hits ([*]"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS endpoint_hits ( [42001-214]
+2022-11-20 15:33:03 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Синтаксическая ошибка в выражении SQL "CREATE TABLE IF NOT EXISTS endpoint_hits ([*]"; ожидалось "identifier"
+Syntax error in SQL statement "CREATE TABLE IF NOT EXISTS endpoint_hits ([*]"; expected "identifier"; SQL statement:
+CREATE TABLE IF NOT EXISTS endpoint_hits ( [42001-214]

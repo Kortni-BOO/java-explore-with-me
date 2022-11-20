@@ -11,9 +11,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompilationDto {
-    long id;
+    Integer id;
 
-    Set<Event> events; ////Список событий входящих в подборку
+    Set<Event> events; //Список событий входящих в подборку
 
     @NonNull
     Boolean pinned; //Закреплена ли подборка на главной странице сайта

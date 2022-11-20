@@ -7,7 +7,6 @@ import lombok.Setter;
 import ru.practucum.explore.events.model.Event;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -19,9 +18,9 @@ import java.util.Set;
 public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Integer id;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "compilations_events",
             joinColumns = @JoinColumn(name = "compilation_id"),

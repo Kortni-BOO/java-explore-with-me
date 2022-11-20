@@ -20,21 +20,21 @@ import java.time.LocalDateTime;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    Long id;
 
-    @Column(name = "annotation")
+    @Column(name = "annotation", columnDefinition="text")
     String annotation; //Краткое описание
 
     @ManyToOne()
     @JoinColumn(name = "category_id")
     Category category; //Категория
 
-    long confirmedRequests; //Количество одобренных заявок на участие в данном событии
+    Integer confirmedRequests; //Количество одобренных заявок на участие в данном событии
 
-    @Column(name = "createdOn")
+    @Column(name = "created_at")
     LocalDateTime createdOn; //Дата и время создания события (в формате "yyyy-MM-dd HH:mm:ss")
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition="text")
     String description; //Полное описание события
 
     @Column(name = "event_date")
@@ -44,15 +44,14 @@ public class Event {
     @JoinColumn(name = "initiator_id")
     User initiator; //Пользователь (краткая информация) UserShortDto
 
-    /**
-     * location - разобраться
-     */
+    Float lat;
+    Float lon;
 
     @Column(name = "paid")
     Boolean paid; //Нужно ли оплачивать участие
 
     @Column(name = "participant_limit")
-    int participantLimit; //Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
+    Integer participantLimit; //Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
 
     @Column(name = "publishedOn")
     LocalDateTime publishedOn; //Дата и время публикации события (в формате "yyyy-MM-dd HH:mm:ss")
@@ -60,12 +59,13 @@ public class Event {
     @Column(name = "request_moderation")
     Boolean requestModeration; //Нужна ли пре-модерация заявок на участие
 
+    @JoinColumn(name = "state")
     @Enumerated(EnumType.STRING)
-    private State state; //Список состояний жизненного цикла события
+    State state; //Список состояний жизненного цикла события
 
     @Column(name = "title")
     String title; //Заголовок
 
     @Column(name = "views")
-    long views; //Количество просмотров события
+    Long views; //Количество просмотров события
 }

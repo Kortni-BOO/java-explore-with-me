@@ -24,7 +24,7 @@ public class EventShortDto {
     @NonNull
     Category category; //Категория
 
-    long confirmedRequests; //Количество одобренных заявок на участие в данном событии
+    Integer confirmedRequests; //Количество одобренных заявок на участие в данном событии
 
     @NonNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

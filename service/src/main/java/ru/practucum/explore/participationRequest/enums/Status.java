@@ -2,6 +2,7 @@ package ru.practucum.explore.participationRequest.enums;
 
 public enum Status {
     PENDING,
-    PUBLISHED,
-    CANCELED
+    CONFIRMED,
+    REJECTED, //чужую отклонить
+    CANCELED //свою отменить
 }
