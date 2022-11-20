@@ -1,51 +1,52 @@
-version: '3.1'
+version: '3.8'
 services:
-  stats:
-    build: stats
-    restart: always
+  statistic:
+    build: ./statistic
+    image: statistic-server
     ports:
       - "9090:9090"
     depends_on:
-      - stats-db
+      - statistic-db
     environment:
-        - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats_data
-        - POSTGRES_USER=test
-        - POSTGRES_PASSWORD=test
-
-  stats-db:
-    image: postgres:14-alpine
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/statistic-db
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
     restart: always
+
+  statistic-db:
+    image: postgres:14-alpine
     volumes:
-        - /var/lib/postgresql/data
+      - /var/lib/postgresql/data/
     ports:
-        - "6542:5432"
+      - "6542:5432"
     environment:
-        - POSTGRES_DB=stats_data
-        - POSTGRES_USER=test
-        - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=statistic-db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    restart: always
 
   service:
-    build: service
-    restart: always
+    build: ./service
+    image: ewm-service
     ports:
       - "8080:8080"
     depends_on:
-        - ewm-db
-        - stats-service
+      - ewm-db
     environment:
-        - STATS_SERVER_URL=http://stats:9090
-        - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm_data
-        - POSTGRES_USER=test
-        - POSTGRES_PASSWORD=test
+      - STATS_SERVER_URL=http://localhost:9090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/expl-db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=iamroot
+    restart: always
 
   ewm-db:
     image: postgres:14-alpine
-    restart: always
-    volumes:
-        - /var/lib/postgresql/data
     ports:
-        - "6541:5432"
+      - "6541:5432"
+    volumes:
+      - /var/lib/postgresql/data/
     environment:
-        - POSTGRES_DB=ewm_data
-        - POSTGRES_USER=test
-        - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=expl-db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=iamroot
+    restart: always
