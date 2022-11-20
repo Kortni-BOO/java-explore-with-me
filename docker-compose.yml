@@ -2,7 +2,7 @@ version: '3.8'
 services:
   statistic:
     build: ./statistic
-    image: statistic-server
+    container_name: statistic
     ports:
       - "9090:9090"
     depends_on:
@@ -27,7 +27,7 @@ services:
 
   service:
     build: ./service
-    image: ewm-service
+    container_name: service
     ports:
       - "8080:8080"
     depends_on:
