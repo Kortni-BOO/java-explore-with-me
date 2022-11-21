@@ -46,7 +46,7 @@ services:
     volumes:
       - /var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=expl-db
+      - POSTGRES_DB=ewm-db
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=iamroot
     restart: always
