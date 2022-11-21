@@ -20,7 +20,6 @@ public class Category {
     @Column(name = "id")
     Integer id; //Идентификатор категории
 
-    @Pattern(regexp = "^[A-Z][a-zA-Z0-9]*")
     @Column(name = "name")
     String name; //Название категории
 }
