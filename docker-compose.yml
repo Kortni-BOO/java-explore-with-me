@@ -21,8 +21,8 @@ services:
       - "6542:5432"
     environment:
       - POSTGRES_DB=statistic-db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=iamroot
     restart: always
 
   service:
