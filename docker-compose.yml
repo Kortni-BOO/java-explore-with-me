@@ -34,7 +34,7 @@ services:
       - ewm-db
     environment:
       - STATS_SERVER_URL=http:/statistic-db:9090
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://expl-db:5432/expl-db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=iamroot
     restart: always
