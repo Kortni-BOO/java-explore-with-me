@@ -1,12 +1,13 @@
 package ru.practucum.explore.events.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practucum.explore.category.mapper.CategoryMapper;
 import ru.practucum.explore.category.model.Category;
 import ru.practucum.explore.category.service.CategoryService;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
     private final EventRepository repository;
     private final UserService userService;
@@ -37,21 +39,6 @@ public class EventServiceImpl implements EventService {
     private final EventMapper mapper;
     private final UserMapper userMapper;
     private final CategoryMapper categoryMapper;
-
-    @Autowired
-    public EventServiceImpl(EventRepository repository,
-                            UserService userService,
-                            EventMapper mapper,
-                            UserMapper userMapper,
-                            CategoryService categoryService,
-                            CategoryMapper categoryMapper) {
-        this.repository = repository;
-        this.userService = userService;
-        this.mapper = mapper;
-        this.userMapper = userMapper;
-        this.categoryService = categoryService;
-        this.categoryMapper = categoryMapper;
-    }
 
     /**
      * Public: События
@@ -149,7 +136,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getFullEventById(long eventId) {
-        return null;
+        Event event = getById(eventId);
+        return mapper.toEventFullDto(event);
     }
 
     /**
@@ -223,6 +211,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto create(NewEventDto eventDto, long userId) {
         if (eventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new DateException("Время на которые намечено событие не может быть раньше, " +
@@ -257,6 +246,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto cancelEvent(long eventId, long userId) {
         Event event = getById(eventId);
         if (event.getInitiator().getId() != userId) {
@@ -276,7 +266,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event getById(long id) {
         Event event = repository.findById(id).orElseThrow(() -> {
-            throw  new ObjectNotFoundException(String.format("Событие с id %d не найдена", id));
+            throw  new ObjectNotFoundException(String.format("Событие с id %d не найдено", id));
         });
         return event;
     }
@@ -398,6 +388,7 @@ public class EventServiceImpl implements EventService {
     }
 
     //Публикация события
+    @Transactional
     public EventFullDto adminPublishEvent(long eventId) {
         Event event = getById(eventId);
         //Событие должно быть в состоянии ожидания публикации
@@ -414,6 +405,7 @@ public class EventServiceImpl implements EventService {
     }
 
     //Отклонение события
+    @Transactional
     public EventFullDto adminRejectEvent(long eventId) {
         Event event = getById(eventId);
         if (event.getState().equals(State.PUBLISHED)) {
@@ -424,74 +416,3 @@ public class EventServiceImpl implements EventService {
         return mapper.toEventFullDto(event);
     }
 }
-
-/*
-//TODO это публичный эндпоинт, соответственно в выдаче должны быть только опубликованные события
-        Specification<Event> publishedSpec = (event, query, cb) -> cb.equal(event.get("state"), State.PUBLISHED);
-
-        //Поиск text в annotation
-        Specification<Event> annotationSpec = Specification.where(
-                (event, query, cb) -> cb.like(cb.lower(event.get("annotation")), "%" + text + "%")
-        );
-
-        //Поиск text в description
-        Specification<Event> descriptionSpec = Specification.where(
-                (event, query, cb) -> cb.like(cb.lower(event.get("description")), "%" + text + "%")
-        );
-
-        //Объединяем поиск и там и там
-        Specification<Event> searchText = annotationSpec.or(descriptionSpec);
-
-        //TODO Проверить на null Вызвать метод
-        //Фильтр: categories
-        if(categories.size() == 0) {
-
-        }
-        Specification<Event> belongsToCategory = Specification.where(
-                (event, query, cb)->
-                        cb.in(cb.in(event.get("category").get("id")).value(categories))
-        );
-
-        //поиск только платных/бесплатных событий(paid)
-        //TODO paid - проверка на null
-        if(paid != null) {
-
-        }
-        Specification<Event> paidSpec = (event, query, cb) -> cb.equal(event.get("paid"), paid);
-
-        //TODO проверка на null и вызвать метод
-        //TODO если в запросе не указан диапазон дат
-        // [rangeStart-rangeEnd], то нужно выгружать события,
-        // которые произойдут позже текущей даты и времени
-        //Фильтр: Дата(от - до) rangeStart rangeEnd
-        Specification<Event> dateSpec = (event, query, cb) -> cb.between(event.get("eventDate"), rangeStart,
-                rangeEnd);
-
-//TODO вынести метод
-Specification<Event> nullRangeSpec = (event, query, cb) ->
-        cb.lessThanOrEqualTo(event.get("eventDate"), LocalDateTime.now());
-    //isAvailable
-    //TODO isAvailable информация о каждом событии должна включать
-    // в себя количество просмотров и количество уже одобренных заявок на участие
-
-    //SortType
-
-    //Page
-    //Sort sort = Sort.by(Sort.Direction.ASC, "eventDate");
-    //Pageable page = PageRequest.of(from, size, sort);
-    Pageable page = PageRequest.of(from, size, Sort.by(Sort.Direction.ASC, "views"));;
-
-        if(sort.equals(SortType.VIEWS)) {
-                page = PageRequest.of(from, size, Sort.by(Sort.Direction.ASC, "views"));
-                } else if (sort.equals(SortType.EVENT_DATE)) {
-                page = PageRequest.of(from, size, Sort.by(Sort.Direction.ASC, "eventDate"));
-                }
-                //Specification<Event> spec = Stream.of(searchText, belongsToCategory, paidSpec, dateSpec, nullRangeSpec);
-                Specification<Event> specifications = Specification.where(searchText)
-        .and(belongsToCategory)
-        .and(paidSpec)
-        .and(dateSpec)
-        .and(nullRangeSpec);
-
-        return repository.findAll(specifications, page).toList().stream().map(mapper::toEventFullDto).collect(Collectors.toList());
-*/

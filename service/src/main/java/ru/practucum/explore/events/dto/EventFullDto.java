@@ -5,7 +5,7 @@ import lombok.*;
 import ru.practucum.explore.category.model.Category;
 import ru.practucum.explore.events.enums.State;
 import ru.practucum.explore.events.model.Location;
-import ru.practucum.explore.user.model.User;
+import ru.practucum.explore.user.dto.UserShortDto;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -14,48 +14,48 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class EventFullDto {
-    long id;
-
     @NonNull
     @NotBlank
-    String annotation; //Краткое описание
+    private String annotation; //Краткое описание
 
     @NonNull
-    Category category; //Категория
+    private Category category; //Категория
 
-    Integer confirmedRequests; //Количество одобренных заявок на участие в данном событии
+    private Integer confirmedRequests; //Количество одобренных заявок на участие в данном событии
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime createdOn; //Дата и время создания события
+    private LocalDateTime createdOn; //Дата и время создания события
 
-    String description; //Полное описание события
+    private String description; //Полное описание события
 
     @NonNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime eventDate; //Дата и время на которые намечено событие
+    private LocalDateTime eventDate; //Дата и время на которые намечено событие
+
+    private Long id;
 
     @NonNull
-    User initiator; //Пользователь (краткая информация) UserShortDto
+    private UserShortDto initiator; //Пользователь (краткая информация) UserShortDto
 
-    Location location;
-
+    private Location location;
 
     @NonNull
-    Boolean paid; //Нужно ли оплачивать участие
+    private Boolean paid; //Нужно ли оплачивать участие
 
-    Integer participantLimit; //Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
+    private Integer participantLimit; //Ограничение на количество участников. Значение 0 - означает отсутствие ограничения
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime publishedOn; //Дата и время публикации события
+    private LocalDateTime publishedOn; //Дата и время публикации события
 
-    Boolean requestModeration; //Нужна ли пре-модерация заявок на участие
+    private Boolean requestModeration; //Нужна ли пре-модерация заявок на участие
 
     private State state; //Список состояний жизненного цикла события
 
     @NonNull
     @NotBlank
-    String title; //Заголовок
+    private String title; //Заголовок
 
-    long views; //Количество просмотров события
+    private long views; //Количество просмотров события
 }
